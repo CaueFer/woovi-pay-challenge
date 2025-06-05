@@ -9,6 +9,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { typeOrmConfig } from './config/db.config';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,7 +19,11 @@ import { typeOrmConfig } from './config/db.config';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

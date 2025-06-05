@@ -5,10 +5,12 @@
 type User {
   id: String!
   name: String!
+  pin: Int!
 }
 
 type Query {
   users: [User!]!
+  findUser(id: String!): User!
 }
 
 type Mutation {
@@ -17,4 +19,5 @@ type Mutation {
 
 input CreateUserDto {
   name: String!
+  pin: Float!
 }
