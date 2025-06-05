@@ -1,0 +1,22 @@
+
+
+services:
+  woovipay_db:
+    container_name: woovipay_db
+    image: postgres:17
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=woovipay
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+
+volumes:
+    postgres-volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./data
