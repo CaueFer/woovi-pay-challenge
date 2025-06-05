@@ -1,16 +1,18 @@
 import { join } from 'node:path';
 
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { AppController } from './app.controller';
-import { typeOrmConfig } from './config/db.config';
-import { AuthModule } from './auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { Module } from '@nestjs/common';
+
+import { typeOrmConfig } from './config/db.config';
+import { AppController } from './app.controller';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/auth.guard';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -26,6 +28,12 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
