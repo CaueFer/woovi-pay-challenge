@@ -1,0 +1,13 @@
+
+
+
+
+## TO DO DO SISTEMA
+
+    ✔ http server @done (6/5/2025, 10:50:30 AM)
+    ☐ multi-tenancy strategy for users
+    ☐ implementar o token bucket para os users - Max 10 tokens
+    ☐ authentication of users with a Bearer Token
+        ☐ login
+        ☐ signup
+    ☐ criar mutation para verificar chave pix
