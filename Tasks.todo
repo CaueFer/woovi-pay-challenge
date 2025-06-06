@@ -7,7 +7,7 @@
     ✔ http server @done (6/5/2025, 10:50:30 AM)
     ☐ multi-tenancy strategy for users
     ☐ implementar o token bucket para os users - Max 10 tokens
-    ☐ authentication of users with a Bearer Token
-        ☐ login
-        ☐ signup
-    ☐ criar mutation para verificar chave pix
+    ✔ authentication of users with a Bearer Token @done (6/5/2025, 1:47:55 PM)
+        ✔ login @done (6/5/2025, 1:47:44 PM)
+        ✔ signup @done (6/5/2025, 1:47:45 PM)
+    ☐ Criar mutation para verificar chave pix
