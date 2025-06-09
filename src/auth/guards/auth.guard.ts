@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from 'src/lib/decorators/skipAuth.decorator';
-import { User } from 'src/lib/entity/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -48,7 +48,9 @@ export class AuthGuard implements CanActivate {
 
       const token = this.extractTokenFromHeader(request);
       if (!token) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({
+          message: 'Unauthorized, please give your JWT Token',
+        });
       }
 
       const payload: Partial<User> = await this.jwtService.verifyAsync(token, {
@@ -57,7 +59,7 @@ export class AuthGuard implements CanActivate {
       request['user'] = payload;
     } catch (err) {
       console.log('Erro auth guard: ', err);
-      throw new HttpException('Erro no servidor.', 500);
+      throw err;
     }
     return true;
   }

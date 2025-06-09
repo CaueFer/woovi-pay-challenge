@@ -26,8 +26,8 @@ export class AuthService {
   }
 
   async signUp(signUpUser: CreateUserDto): Promise<{ message: string }> {
-    await this.userService.saveUser(signUpUser);
+    const response = await this.userService.saveUser(signUpUser);
 
-    return { message: 'User created successfully!' };
+    return { message: response };
   }
 }

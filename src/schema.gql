@@ -8,16 +8,32 @@ type User {
   pin: Int!
 }
 
+type PixKey {
+  id: String!
+  key: String!
+  owner: User!
+}
+
+type PixKeyResponse {
+  message: String
+  pixKey: PixKey
+}
+
 type Query {
   users: [User!]!
   findUser(id: String!): User!
 }
 
 type Mutation {
-  createUser(newUser: CreateUserDto!): User!
+  createUser(newUser: CreateUserDto!): String!
+  savePixKey(newPix: SavePixKeyDto!): PixKeyResponse!
 }
 
 input CreateUserDto {
   name: String!
-  pin: Float!
+  pin: Int!
+}
+
+input SavePixKeyDto {
+  key: String!
 }

@@ -1,8 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { UserService } from './user.service';
-import { User } from '../lib/entity/user.entity';
+
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/createUser.dto';
+import { SkipAuth } from 'src/lib/decorators/skipAuth.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -18,8 +20,9 @@ export class UserResolver {
     return await this.userService.getUserById(id);
   }
 
-  @Mutation(() => User)
-  async createUser(@Args('newUser') newUser: CreateUserDto): Promise<User> {
+  @SkipAuth()
+  @Mutation(() => String)
+  async createUser(@Args('newUser') newUser: CreateUserDto): Promise<string> {
     return await this.userService.saveUser(newUser);
   }
 }
