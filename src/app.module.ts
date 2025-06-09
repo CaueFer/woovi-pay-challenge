@@ -17,6 +17,8 @@ import { PaymentModule } from './payment/payment.module';
 import { RateLimitByIp } from './auth/guards/ratelimitip.guard';
 
 import { typeOrmConfig } from './config/db.config';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisOptions } from './config/redis.config';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -46,6 +48,7 @@ import { typeOrmConfig } from './config/db.config';
         ),
       }),
     }),
+    CacheModule.registerAsync(RedisOptions),
     UserModule,
     AuthModule,
     PaymentModule,
