@@ -12,6 +12,15 @@ services:
       - POSTGRES_DB=woovipay
     volumes:
       - postgres-volume:/var/lib/postgresql/data
+    
+  woovipay_redis:
+    image: redis
+    restart: on-failure:3
+    ports:
+      - '6379:6379'
+    command: redis-server --loglevel warning --requirepass senha123
+    volumes: 
+      - redis:/data
 
 volumes:
     postgres-volume:
@@ -20,3 +29,5 @@ volumes:
             type: none
             o: bind
             device: ./data
+    redis:
+      driver: local

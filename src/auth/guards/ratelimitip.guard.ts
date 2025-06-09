@@ -2,15 +2,16 @@
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { type Request, type Response } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { BadRequestException, ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 
 interface getContext {
   req: Request;
   res: Response;
 }
 
+@Injectable()
 export class RateLimitByIp extends ThrottlerGuard {
-  protected getRequestResponse(context: ExecutionContext): {
+  getRequestResponse(context: ExecutionContext): {
     req: Record<string, any>;
     res: Record<string, any>;
   } {
@@ -19,7 +20,6 @@ export class RateLimitByIp extends ThrottlerGuard {
     if (ctxType === 'http') {
       const req = context.switchToHttp().getRequest();
       const res = context.switchToHttp().getResponse();
-
       return { req, res };
     }
 
@@ -29,13 +29,13 @@ export class RateLimitByIp extends ThrottlerGuard {
       return { req: ctx.req, res: ctx.res };
     }
 
-    throw new BadRequestException('Unsupported request type');
+    return { req: {}, res: {} };
   }
 
   protected getTracker(req: Record<string, any>): Promise<string> {
     const ip: unknown =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      req.ip || req?.headers?.['x-forwarded-for']?.split(',')[0].trim();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      req.ip || req?.headers?.['x-forwarded-for'] || 'unknown';
 
     return ip as Promise<string>; // LIMITA APENAS POR IP
   }
