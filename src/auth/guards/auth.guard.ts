@@ -1,17 +1,17 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { type Request } from 'express';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 import { IS_PUBLIC_KEY } from 'src/lib/decorators/skipAuth.decorator';
+import { contextHelper } from 'src/lib/util/context-helper';
+
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
@@ -30,26 +30,17 @@ export class AuthGuard implements CanActivate {
       );
       if (isPublic) return true;
 
-      let request: Request;
+      const request = contextHelper.getRequestFromCtx(context);
 
-      // HTTP - REST
-      request = context.switchToHttp().getRequest<Request>();
-
-      // SE NAO FOR REST
-      if (!request) {
-        const gqlCtx: { req: unknown } =
-          GqlExecutionContext.create(context).getContext();
-
-        if (!gqlCtx || !gqlCtx.req)
-          throw new HttpException('Erro na requisição', 500);
-
-        request = gqlCtx.req as Request;
-      }
+      if (!request)
+        throw new UnauthorizedException({
+          message: 'Invalid request type.',
+        });
 
       const token = this.extractTokenFromHeader(request);
       if (!token) {
         throw new UnauthorizedException({
-          message: 'Unauthorized, please give your JWT Token',
+          message: 'Unauthorized, please give your JWT Token.',
         });
       }
 
@@ -61,6 +52,7 @@ export class AuthGuard implements CanActivate {
       console.log('Erro auth guard: ', err);
       throw err;
     }
+
     return true;
   }
 

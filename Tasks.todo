@@ -6,7 +6,7 @@
 
     ✔ http server @done (6/5/2025, 10:50:30 AM)
 
-    ☐ multi-tenancy strategy for users
+    ✔ multi-tenancy strategy for users @done (6/9/2025, 9:42:53 PM)
 
     Authorization
     ✔ authentication of users with a Bearer Token @done (6/5/2025, 1:47:55 PM)
@@ -20,7 +20,16 @@
     
     Rate Limit
         ✔ Rate Limit por IP default @done (6/9/2025, 11:04:54 AM)
-        ☐ Implementar o token bucket para os users - Max 10 tokens - refresh de 1/h
+        ✔ Implementar o token bucket para os users - Max 10 tokens - refresh de 1/h @done (6/9/2025, 9:21:16 PM)
+    
+    Pix 
+        ☐ Criar a mutation para fazer insert de um payment do tipo pix
+
+    Fazer frontend
+        ☐ Fazer consulta do pix
+        ☐ Fazer transacao (fake) do pagamento via pix
+
+    
 
 
     

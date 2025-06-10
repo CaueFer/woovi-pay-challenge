@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
+import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { type Request, type Response } from 'express';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -17,7 +18,6 @@ import { PaymentModule } from './payment/payment.module';
 import { RateLimitByIp } from './auth/guards/ratelimitip.guard';
 
 import { typeOrmConfig } from './config/db.config';
-import { CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from './config/redis.config';
 @Module({
   imports: [
@@ -43,9 +43,11 @@ import { RedisOptions } from './config/redis.config';
             limit: Number(config.get('THROTTLE_LIMIT') ?? 10),
           },
         ],
-        storage: new ThrottlerStorageRedisService(
-          config.get<string>('REDIS_URL'),
-        ),
+        storage: new ThrottlerStorageRedisService({
+          host: config.get<string>('REDIS_HOST'),
+          port: config.get<number>('REDIS_PORT'),
+          password: config.get<string>('REDIS_PASSWORD'),
+        }),
       }),
     }),
     CacheModule.registerAsync(RedisOptions),
